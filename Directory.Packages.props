@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Compile the package against the oldest supported API. A site restores its own Umbraco 18 release. -->
+    <PackageVersion Include="Umbraco.Cms.Web.Website" Version="[$(UmbracoMinimumVersion), 19.0.0)" />
+    <PackageVersion Include="Umbraco.Cms.Api.Management" Version="[$(UmbracoMinimumVersion), 19.0.0)" />
+    <PackageVersion Include="AurorisNet.IdentityServer" Version="1.1.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.15" />
+    <PackageVersion Include="Umbraco.Cms" Version="[$(UmbracoVersion)]" />
+    <PackageVersion Include="Umbraco.Cms.DevelopmentMode.Backoffice" Version="[$(UmbracoVersion)]" />
+    <PackageVersion Include="xunit.v3" Version="4.0.3" />
+  </ItemGroup>
+</Project>

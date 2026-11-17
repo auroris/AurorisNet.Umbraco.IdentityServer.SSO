@@ -1,0 +1,8 @@
+{
+  "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
+  "Category": "Developer Tools",
+  "LicenseTypes": ["Free"],
+  "PackageType": "Package",
+  "DocumentationUrl": "https://github.com/auroris/AurorisNet.Umbraco.IdentityServer.SSO#settings",
+  "IssueTrackerUrl": "https://github.com/auroris/AurorisNet.Umbraco.IdentityServer.SSO/issues"
+}

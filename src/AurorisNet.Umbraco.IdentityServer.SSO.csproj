@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>AurorisNet.Umbraco.IdentityServer.SSO</PackageId>
+    <!-- Only the package id carries the AurorisNet prefix; the assembly and namespace keep the plain name. -->
+    <AssemblyName>IdentityServer.Sso</AssemblyName>
+    <RootNamespace>IdentityServer.Sso</RootNamespace>
+    <Title>Umbraco IdentityServer SSO</Title>
+    <!-- Local builds are a prerelease, so NuGet's cache never mixes them with a published version. The release
+         workflow supplies the published version. -->
+    <Version>0.0.0-local</Version>
+    <Authors>Auroris</Authors>
+    <Description>Single sign-on for Umbraco 18 backoffice users and members through an OpenID Connect identity server: the site's own embedded IdentityServer with Windows authentication, or an external one. Adds the login buttons and automatic redirect, a password fallback when the server is unreachable, account seeding from configuration, and retirement of deleted accounts that have signed in.</Description>
+    <PackageTags>umbraco;umbraco-marketplace;sso;openid-connect;oidc;windows-authentication;active-directory;login;members;backoffice</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/auroris/AurorisNet.Umbraco.IdentityServer.SSO</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/auroris/AurorisNet.Umbraco.IdentityServer.SSO</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>https://github.com/auroris/AurorisNet.Umbraco.IdentityServer.SSO/releases/tag/v$(Version)</PackageReleaseNotes>
+    <DebugType>embedded</DebugType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <NuGetAuditMode>direct</NuGetAuditMode>
+    <!-- The IIS helper in tools/ is run by hand, never by NuGet, so its name is not one of NuGet's install scripts. -->
+    <NoWarn>$(NoWarn);NU5111</NoWarn>
+    <!-- IdentityServer.Core builds from the sibling IdentityServer checkout, so a site that also builds the Add from
+         directory package from source gets one ActiveDirectory assembly. Set UseIdentityServerSource to false to use
+         the AurorisNet.IdentityServer package instead, as the release workflow does. -->
+    <IdentityServerRoot Condition="'$(IdentityServerRoot)' == ''">$(MSBuildThisFileDirectory)..\..\IdentityServer</IdentityServerRoot>
+    <UseIdentityServerSource Condition="'$(UseIdentityServerSource)' == ''">true</UseIdentityServerSource>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- The implicit usings of the Web SDK, which this code was written against. -->
+    <Using Include="Microsoft.AspNetCore.Builder" />
+    <Using Include="Microsoft.AspNetCore.Hosting" />
+    <Using Include="Microsoft.AspNetCore.Http" />
+    <Using Include="Microsoft.Extensions.Configuration" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
+    <Using Include="Microsoft.Extensions.Hosting" />
+    <Using Include="Microsoft.Extensions.Logging" />
+    <Using Include="Umbraco.Cms.Core.DependencyInjection" />
+    <Using Include="Umbraco.Extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" />
+    <PackageReference Include="Umbraco.Cms.Api.Management" />
+    <ProjectReference Include="$(IdentityServerRoot)\IdentityServer.Core\IdentityServer.Core.csproj" Condition="'$(UseIdentityServerSource)' == 'true'" />
+    <PackageReference Include="AurorisNet.IdentityServer" Condition="'$(UseIdentityServerSource)' != 'true'" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+    <InternalsVisibleTo Include="IdentityServer.Sso.Tests" />
+    <!-- The README also serves nuget.org, which renders Markdown without HTML or relative links. -->
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+    <None Include="../docs/images/icon.png" Pack="true" PackagePath="/" />
+    <None Include="../LICENSE" Pack="true" PackagePath="/" />
+    <!-- The IIS helper ships in the package's tools folder, where NuGet extracts it beside the package. -->
+    <None Include="../tools/configure-iis-authentication.ps1" Pack="true" PackagePath="tools/" />
+  </ItemGroup>
+  <!-- A published package must depend on the published identity server: a project reference would name a package
+       version that nobody published. -->
+  <Target Name="RefuseIdentityServerSourceInReleasePackage" BeforeTargets="GenerateNuspec"
+          Condition="'$(UseIdentityServerSource)' == 'true' and '$(ContinuousIntegrationBuild)' == 'true'">
+    <Error Text="A release package needs the published AurorisNet.IdentityServer. Pack with -p:UseIdentityServerSource=false." />
+  </Target>
+</Project>

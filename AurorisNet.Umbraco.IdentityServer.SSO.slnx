@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/AurorisNet.Umbraco.IdentityServer.SSO.csproj" />
+  <Project Path="tests/IdentityServer.Sso.Tests/IdentityServer.Sso.Tests.csproj" />
+</Solution>

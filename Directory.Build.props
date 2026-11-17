@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <!-- The package compiles against the oldest supported release; the tests run on the newest. -->
+    <UmbracoMinimumVersion>18.0.0</UmbracoMinimumVersion>
+    <UmbracoVersion>18.3.1</UmbracoVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ContinuousIntegrationBuild)' == 'true'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU1900;NU1901;NU1902;NU1903;NU1904;NU1905</WarningsNotAsErrors>
+  </PropertyGroup>
+</Project>

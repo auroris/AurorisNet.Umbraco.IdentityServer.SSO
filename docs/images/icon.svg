@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <rect width="128" height="128" rx="26" fill="#1e293b"/>
+  <!-- The sites one sign-in opens, joined in a ring. -->
+  <circle cx="64" cy="64" r="40" fill="none" stroke="#94a3b8" stroke-width="5"/>
+  <g fill="#fff">
+    <circle cx="64" cy="24" r="9"/>
+    <circle cx="29.4" cy="84" r="9"/>
+    <circle cx="98.6" cy="84" r="9"/>
+  </g>
+  <!-- The one key at the centre. -->
+  <g fill="none" stroke="#fbbf24" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="52" cy="62" r="10"/>
+    <path d="M62 62 L84 62"/>
+    <path d="M78 62 L78 71"/>
+    <path d="M70 62 L70 69"/>
+  </g>
+</svg>
