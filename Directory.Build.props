@@ -1,8 +1,10 @@
 <Project>
   <PropertyGroup>
+    <!-- The Umbraco releases the tests have run on: the first and the newest of each major version. The New Umbraco releases workflow adds each new release that passes. -->
+    <UmbracoReleases>18.0.0;18.3.2</UmbracoReleases>
     <!-- The package compiles against the oldest supported release; the tests run on the newest. -->
     <UmbracoMinimumVersion>18.0.0</UmbracoMinimumVersion>
-    <UmbracoVersion>18.3.1</UmbracoVersion>
+    <UmbracoVersion>18.3.2</UmbracoVersion>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>

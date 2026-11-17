@@ -1,0 +1,62 @@
+name: CI
+
+# Tests each pull request on the newest supported Umbraco release, and merges a Dependabot update that passes. Other
+# Umbraco releases are tested on a developer's machine, as the README's Developing section describes.
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: pwsh
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+  DOTNET_NOLOGO: '1'
+  TESTINGPLATFORM_TELEMETRY_OPTOUT: '1'
+
+jobs:
+  test:
+    name: Test
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      ContinuousIntegrationBuild: 'true'
+      # Build against the published IdentityServer package, which the package then depends on, instead of a sibling checkout.
+      UseIdentityServerSource: 'false'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # global.json keeps the build on a .NET 10 SDK, whichever other SDKs the runner has.
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Test
+        run: dotnet test --project tests/IdentityServer.Sso.Tests -c Release
+
+      - name: Pack
+        run: dotnet pack src/AurorisNet.Umbraco.IdentityServer.SSO.csproj -c Release -o artifacts/packages
+
+  # A workflow that runs for Dependabot gets a read-only token unless the job asks for more.
+  dependabot:
+    name: Merge Dependabot update
+    needs: test
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - uses: auroris/AurorisNet.Build/actions/dependabot-release@main

@@ -26,7 +26,7 @@
     <!-- IdentityServer.Core builds from the sibling IdentityServer checkout, so a site that also builds the Add from
          directory package from source gets one ActiveDirectory assembly. Set UseIdentityServerSource to false to use
          the AurorisNet.IdentityServer package instead, as the release workflow does. -->
-    <IdentityServerRoot Condition="'$(IdentityServerRoot)' == ''">$(MSBuildThisFileDirectory)..\..\IdentityServer</IdentityServerRoot>
+    <IdentityServerRoot Condition="'$(IdentityServerRoot)' == ''">$(MSBuildThisFileDirectory)..\..\AurorisNet.IdentityServer</IdentityServerRoot>
     <UseIdentityServerSource Condition="'$(UseIdentityServerSource)' == ''">true</UseIdentityServerSource>
   </PropertyGroup>
   <ItemGroup>
