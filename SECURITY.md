@@ -17,21 +17,25 @@ A report is easier to act on when it includes:
 ## Versions that get fixes
 
 A fix is published as a new package version. Earlier versions stay as they are, so install
-the newest version for your site; a `1.*` reference picks it up on the next restore.
+the newest version.
 
 ## What the package covers
 
 The site's configuration decides whom the site trusts, so some access is by design:
 
-- Anyone who can write `appsettings.json`, or set the matching environment variables, chooses
-  the identity server the site trusts and the applications that may sign in through its
-  embedded server. Protect the configuration as you would the accounts themselves.
-- `IdentityServer:AcceptAnyServerCertificate` turns off certificate validation for calls to the
-  identity server.
+- Anyone who can write `appsettings.json`, or set the matching environment variables,
+  chooses the identity server the site trusts and the applications that may sign in through
+  its embedded server. Protect the configuration as you protect the accounts themselves.
+- `IdentityServer:AcceptAnyServerCertificate` turns off certificate validation for the
+  site's calls to the identity server.
+- `IdentityServer:MemberAutoLink:AutoLinkExternalAccount` is on by default, so the identity
+  server decides who becomes a member.
 
-A vulnerability is anything beyond that, for example: a sign-in to an account linked to another
-identity, a retired account signing in, the embedded server issuing a code or token to a client
-or redirect address it does not list, a protocol failure that bypasses Umbraco's password or
-two-factor checks, or a return address that leaves the site. For a vulnerability in the OpenID
-Connect server library, report it to `AurorisNet.IdentityServer`; for one in Umbraco itself,
-follow [Umbraco's security policy](https://github.com/umbraco/Umbraco-CMS/security/policy).
+A vulnerability is anything beyond that. Examples are a sign-in to an account linked to
+another identity, a retired account that signs in, a code or token that the embedded server
+issues to a client or redirect address it does not list, a protocol failure that bypasses
+Umbraco's password or two-factor checks, or a return address that leaves the site. For a
+vulnerability in the identity server library, report it to
+[AurorisNet.IdentityServer](https://github.com/auroris/AurorisNet.IdentityServer). For one in
+Umbraco itself, follow
+[Umbraco's security policy](https://github.com/umbraco/Umbraco-CMS/security/policy).
