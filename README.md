@@ -1,5 +1,23 @@
 # Umbraco IdentityServer SSO
 
+> **Warning: additional packages and configuration required.** This package is part of a
+> larger identity and single sign-on implementation. It requires:
+>
+> - A supported Umbraco 18 website running on .NET 10.
+> - [`AurorisNet.IdentityServer`](https://github.com/auroris/AurorisNet.IdentityServer/blob/main/IdentityServer.Core/README.md)
+>   and `AurorisNet.ActiveDirectory`, installed automatically as NuGet dependencies.
+> - A configured identity server: the embedded server with Windows authentication, or a
+>   separately deployed server with directory authentication and this site's client and
+>   callback addresses registered.
+> - `AddSingleSignOn()` registration, enabled `IdentityServer` settings, and an account-linking
+>   or provisioning policy for the site's backoffice users and members.
+>
+> Install and configure
+> [`AurorisNet.Umbraco.IdentityServer.Directory`](https://github.com/auroris/AurorisNet.Umbraco.IdentityServer.Directory)
+> as well if administrators need to create accounts with **Add from directory**. That
+> companion package is optional for sign-in. Installing this package alone does not configure
+> the identity server, Windows authentication or account access.
+
 Sign people in to an Umbraco site, as backoffice users and as members, with their Windows,
 Active Directory, Samba AD or FreeIPA account.
 

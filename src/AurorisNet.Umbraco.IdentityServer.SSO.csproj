@@ -10,7 +10,7 @@
     <Version>0.0.0-local</Version>
     <Authors>Auroris</Authors>
     <Description>Single sign-on for Umbraco 18 backoffice users and members through an OpenID Connect identity server: the site's own embedded IdentityServer with Windows authentication, or an external one. Adds the login buttons and automatic redirect, a password fallback when the server is unreachable, account seeding from configuration, and retirement of deleted accounts that have signed in.</Description>
-    <PackageTags>umbraco;umbraco-marketplace;sso;openid-connect;oidc;windows-authentication;active-directory;login;members;backoffice</PackageTags>
+    <PackageTags>umbraco;sso;openid-connect;oidc;windows-authentication;active-directory;login;members;backoffice</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
