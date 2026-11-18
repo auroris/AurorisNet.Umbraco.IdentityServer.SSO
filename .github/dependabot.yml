@@ -10,6 +10,16 @@ updates:
       interval: daily
     ignore:
       - dependency-name: "Umbraco.*"
+      # These packages follow the .NET version the projects target, so a new major version waits for that upgrade.
+      - dependency-name: "Microsoft.Extensions.*"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "Microsoft.AspNetCore.*"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "Microsoft.Data.Sqlite"
+        update-types:
+          - "version-update:semver-major"
     groups:
       # The IdentityServer packages are the second dependency the package follows. They get a pull request of their own,
       # so each of their releases becomes a release of this package.
