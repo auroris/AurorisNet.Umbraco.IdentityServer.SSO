@@ -1,0 +1,30 @@
+name: Weekly release
+
+# Each Thursday, publishes one release that holds every update merged since the last one: the Dependabot updates of the
+# packages it ships and the Umbraco releases that passed the tests. A week without such an update has no release. The
+# job comes from auroris/AurorisNet.Build, whose docs/releasing.md describes it.
+on:
+  schedule:
+    - cron: '41 7 * * 4'
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Show the release that would start, without starting it
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: weekly-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    uses: auroris/AurorisNet.Build/.github/workflows/weekly-release.yml@main
+    permissions:
+      actions: write
+      contents: read
+    with:
+      dry-run: ${{ inputs.dry-run || false }}

@@ -1,12 +1,12 @@
 name: New Umbraco releases
 
-# Looks each day for new releases of the Umbraco major versions the package supports, and runs the tests on those
-# releases only. A release that passes is added to UmbracoReleases on main, and the Release workflow publishes a package
+# Looks each Wednesday for new releases of the Umbraco major versions the package supports, and runs the tests on those
+# releases only. A release that passes is added to UmbracoReleases on main, and the weekly release publishes a package
 # for it. A release that fails gets an issue. The jobs come from auroris/AurorisNet.Build, whose docs/releasing.md
 # describes them.
 on:
   schedule:
-    - cron: '41 6 * * *'
+    - cron: '41 6 * * 3'
   workflow_dispatch:
     inputs:
       releases:
@@ -14,7 +14,7 @@ on:
         required: false
         default: ''
       dry-run:
-        description: Show the results in the run only, without a commit, a release or an issue
+        description: Show the results in the run only, without a commit or an issue
         type: boolean
         default: false
 
@@ -37,6 +37,5 @@ jobs:
       # The tests boot a real Umbraco site with SQLite, so nothing outside the runner is needed.
       # They build against the published IdentityServer package, as a release does.
       test-command: dotnet test --project tests/IdentityServer.Sso.Tests -c Release "-p:UmbracoVersion=$env:UMBRACO_RELEASE" -p:UseIdentityServerSource=false
-      bump: auto
       releases: ${{ inputs.releases || '' }}
       dry-run: ${{ inputs.dry-run || false }}

@@ -57,6 +57,5 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      actions: write
     steps:
       - uses: auroris/AurorisNet.Build/actions/dependabot-release@main

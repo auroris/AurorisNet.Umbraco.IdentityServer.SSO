@@ -1,13 +1,17 @@
 # Dependabot opens the pull requests that .github/workflows/ci.yml tests and merges. An update of a package the project
-# under src references, such as the IdentityServer package, then starts the Release workflow. The New Umbraco releases
+# under src references, such as the IdentityServer package, ships in the next weekly release. The New Umbraco releases
 # workflow follows Umbraco itself, so Dependabot leaves the Umbraco packages alone. The workflows pin each action to a
 # commit; Dependabot updates the commit and the version in the comment beside it.
+#
+# Dependabot checks each Wednesday, the day after the weekly releases of the repositories whose packages this one
+# follows, so their releases arrive here in the same week. The New Umbraco releases workflow runs on Wednesday too.
 version: 2
 updates:
   - package-ecosystem: nuget
     directory: /
     schedule:
-      interval: daily
+      interval: weekly
+      day: wednesday
     ignore:
       - dependency-name: "Umbraco.*"
       # These packages follow the .NET version the projects target, so a new major version waits for that upgrade.
@@ -22,7 +26,7 @@ updates:
           - "version-update:semver-major"
     groups:
       # The IdentityServer packages are the second dependency the package follows. They get a pull request of their own,
-      # so each of their releases becomes a release of this package.
+      # so each of their releases is tested and merged on its own.
       identityserver:
         patterns:
           - "AurorisNet.*"
@@ -39,7 +43,7 @@ updates:
     directory: /
     schedule:
       interval: weekly
-      day: monday
+      day: wednesday
     groups:
       github-actions:
         patterns:

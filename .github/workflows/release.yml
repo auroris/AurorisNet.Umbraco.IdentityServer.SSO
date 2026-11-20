@@ -2,8 +2,8 @@ name: Release
 
 run-name: Release ${{ inputs.version || format('(next {0})', inputs.bump) }}${{ inputs.dry-run && ' (dry run)' || '' }}
 
-# Publishes the package to nuget.org and GitHub. Starts by hand, or from the New Umbraco releases and CI workflows when
-# a new release of a dependency has passed the tests. The shared steps come from auroris/AurorisNet.Build, whose
+# Publishes the package to nuget.org and GitHub. Starts by hand, or from the Weekly release workflow when
+# a new release of a dependency has been merged. The shared steps come from auroris/AurorisNet.Build, whose
 # docs/releasing.md describes them. nuget.org trusts this file by its name, so keep it release.yml.
 on:
   workflow_dispatch:
@@ -20,7 +20,7 @@ on:
           - patch
           - minor
       test:
-        description: Run the tests before publishing. The automated runs turn this off, because they have just run them.
+        description: Run the tests before publishing.
         type: boolean
         default: true
       dry-run:
