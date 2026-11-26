@@ -96,8 +96,9 @@ Narrow `Groups` to keep tokens small.
 
 The server stores 2048-bit RSA signing and encryption keys as `signing-key.bin` and
 `encryption-key.bin` in `DataPath`, protected with Windows machine DPAPI. Persisted keys
-let the server redeem an unexpired authorization code and validate issued tokens after a
-restart.
+let the server validate issued tokens after a restart. The embedded issuer keeps outstanding
+codes in process memory. Each code can be exchanged once in the process that issued it.
+If the site recycles during sign-in, start a fresh sign-in to get a new code.
 
 - Keep the folder outside the published application files, so an update keeps the keys. The
   default, `App_Data/keys/identity-server`, qualifies: a publish writes no files to
