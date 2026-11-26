@@ -98,7 +98,9 @@ The server stores 2048-bit RSA signing and encryption keys as `signing-key.bin` 
 `encryption-key.bin` in `DataPath`, protected with Windows machine DPAPI. Persisted keys
 let the server validate issued tokens after a restart. The embedded issuer keeps outstanding
 codes in process memory. Each code can be exchanged once in the process that issued it.
-If the site recycles during sign-in, start a fresh sign-in to get a new code.
+Run the site as one instance, with one worker process in its application pool, so the token
+request reaches that process. If the site recycles during sign-in, start a fresh sign-in to
+get a new code.
 
 - Keep the folder outside the published application files, so an update keeps the keys. The
   default, `App_Data/keys/identity-server`, qualifies: a publish writes no files to
@@ -171,7 +173,7 @@ Windows sign-in, enable Windows Authentication for the site and restart it.
 | The browser keeps prompting for credentials, or `/connect/authorize` answers 401 repeatedly. | Browsers send Windows credentials silently only to sites in the Local Intranet zone (Edge, Chrome) or listed in `network.negotiate-auth.trusted-uris` (Firefox). Add the site there. In IIS, check that Windows Authentication is enabled. |
 | A domain account signs in with NTLM where Kerberos is expected. | The host name has no SPN for the application pool's account. Register one with `setspn -S HTTP/host.domain DOMAIN\account`. NTLM still signs people in, and local accounts always use it. |
 | `/connect/authorize` answers `invalid_request` and names the client id or the redirect address. | The client is not listed, or its redirect address differs from the listed one. |
-| The browser returns to the password form after `/signin-oidc/...`. | The site could not redeem the code, for example because it could not reach its own token endpoint at the address the browser used. The log records the failure. See [Separation from Umbraco's server](#separation-from-umbracos-server). |
+| The browser returns to the password form after `/signin-oidc/...`. | The site could not redeem the code: it could not reach its own token endpoint at the address the browser used, or it restarted after it issued the code. The log records the failure, and names a code the server refused as `Authorization code refused`. See [Separation from Umbraco's server](#separation-from-umbracos-server). |
 | The embedded server answers `access_denied`, and the login screen has no provider button. | IIS has Anonymous Authentication only. See [With Anonymous Authentication only](#with-anonymous-authentication-only). |
 | Startup stops with `IdentityServer:Authority is empty ... EmbeddedIdentityServer:Enabled is false`. | Enable the embedded server, or set `Authority` to an external server. |
 | A Windows Security dialog opens after a backoffice sign-out. | IIS adds Windows challenges under `umbraco`. Run the helper script from [IIS Windows authentication](#iis-windows-authentication). |

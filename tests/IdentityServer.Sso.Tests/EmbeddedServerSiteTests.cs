@@ -169,7 +169,7 @@ public sealed class EmbeddedServerSiteTests(EmbeddedServerSite fixture) : IClass
     }
 
     [Fact]
-    public async Task A_registered_client_gets_tokens_for_the_current_Windows_user()
+    public async Task A_registered_client_gets_tokens_for_the_current_Windows_user_once()
     {
         // Negotiate falls back to NTLM on the loopback address, so the current Windows account signs in without
         // Kerberos; other platforms have no current Windows account.
@@ -186,17 +186,24 @@ public sealed class EmbeddedServerSiteTests(EmbeddedServerSite fixture) : IClass
         Assert.NotEmpty(code);
 
         using var client = Site.CreateClient();
-        using var token = await client.PostAsync("/connect/token", new FormUrlEncodedContent(new Dictionary<string, string>
+        var exchange = new Dictionary<string, string>
         {
             ["grant_type"] = "authorization_code", ["code"] = code, ["redirect_uri"] = EmbeddedServerSite.RedirectUri,
             ["client_id"] = EmbeddedServerSite.ClientId, ["client_secret"] = EmbeddedServerSite.ClientSecret, ["code_verifier"] = verifier,
-        }), TestContext.Current.CancellationToken);
+        };
+        using var token = await client.PostAsync("/connect/token", new FormUrlEncodedContent(exchange), TestContext.Current.CancellationToken);
         var json = await token.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.True(token.IsSuccessStatusCode, json);
         var idToken = new JsonWebToken(JsonDocument.Parse(json).RootElement.GetProperty("id_token").GetString());
 #pragma warning disable CA1416 // Skipped above on other platforms.
         Assert.Equal(WindowsIdentity.GetCurrent().User!.Value, idToken.Subject);
 #pragma warning restore CA1416
+
+        // The server exchanges a code once, so it refuses the same request the second time.
+        using var replay = await client.PostAsync("/connect/token", new FormUrlEncodedContent(exchange), TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.BadRequest, replay.StatusCode);
+        var refusal = await replay.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+        Assert.Equal("invalid_grant", JsonDocument.Parse(refusal).RootElement.GetProperty("error").GetString());
     }
 
     [Fact]
