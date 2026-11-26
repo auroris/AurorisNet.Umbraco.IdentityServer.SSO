@@ -4,12 +4,12 @@
     <!-- Only the package id carries the AurorisNet prefix; the assembly and namespace keep the plain name. -->
     <AssemblyName>IdentityServer.Sso</AssemblyName>
     <RootNamespace>IdentityServer.Sso</RootNamespace>
-    <Title>Umbraco IdentityServer SSO</Title>
+    <Title>IdentityServer SSO</Title>
     <!-- Local builds are a prerelease, so NuGet's cache never mixes them with a published version. The release
          workflow supplies the published version. -->
     <Version>0.0.0-local</Version>
     <Authors>Auroris</Authors>
-    <Description>Single sign-on for Umbraco 18 backoffice users and members through an OpenID Connect identity server: the site's own embedded IdentityServer with Windows authentication, or an external one. Adds the login buttons and automatic redirect, a password fallback when the server is unreachable, account seeding from configuration, and retirement of deleted accounts that have signed in.</Description>
+    <Description>OpenID Connect SSO for Umbraco 18 backoffice users and members via an embedded Windows-authenticated IdentityServer or an external AurorisNet.IdentityServer instance.</Description>
     <PackageTags>umbraco;sso;openid-connect;oidc;windows-authentication;active-directory;login;members;backoffice</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>

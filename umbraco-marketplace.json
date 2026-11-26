@@ -1,8 +1,16 @@
 {
   "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
+  "Title": "IdentityServer SSO",
+  "Description": "OpenID Connect SSO for Umbraco 18 backoffice users and members via an embedded Windows-authenticated IdentityServer or an external AurorisNet.IdentityServer instance.",
   "Category": "Developer Tools",
   "LicenseTypes": ["Free"],
   "PackageType": "Package",
   "DocumentationUrl": "https://github.com/auroris/AurorisNet.Umbraco.IdentityServer.SSO#settings",
-  "IssueTrackerUrl": "https://github.com/auroris/AurorisNet.Umbraco.IdentityServer.SSO/issues"
+  "IssueTrackerUrl": "https://github.com/auroris/AurorisNet.Umbraco.IdentityServer.SSO/issues",
+  "RelatedPackages": [
+    {
+      "PackageId": "AurorisNet.Umbraco.IdentityServer.Directory",
+      "Description": "Optional companion package adding 'Add from directory' to Users and Members."
+    }
+  ]
 }
